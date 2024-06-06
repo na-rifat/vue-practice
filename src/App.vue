@@ -1,9 +1,12 @@
 <template>
     <Header />
     <div class="container">
-        <Balance />
-        <IncomeExpenses />
-        <TransactionList />
+        <Balance :balance="balance" />
+        <IncomeExpenses :income="income" :expense="expense" />
+        <TransactionList
+            :transactions="transactions"
+            @remove-transaction="removeTransaction"
+        />
         <AddTransaction />
     </div>
 </template>
@@ -22,6 +25,46 @@ export default {
         IncomeExpenses,
         TransactionList,
         AddTransaction,
+    },
+    data: () => ({
+        transactions: [
+            { id: 1, text: "Flower", amount: -19.99 },
+            { id: 2, text: "Salary", amount: 500 },
+            { id: 3, text: "Book", amount: -10.99 },
+            { id: 4, text: "Camera", amount: 150 },
+        ],
+        balance: 0,
+        income: 0,
+        expense: 0
+    }),
+    methods: {
+        removeTransaction(id) {
+            this.transactions = this.transactions.filter(
+                (transaction) => transaction.id !== id
+            );
+        },
+        addTransaction(transaction) {
+            transaction.id = this.genereteUUID();
+            this.transactions.push(transaction);
+        },
+        genereteUUID() {
+            return Math.ceil(Math.random() * 1000);
+        },
+        getBalance() {
+            return this.transactions.reduce(
+                (t, transaction) => t + transaction.amount
+            );
+        },
+        getIncome() {
+            this.transactions
+                .filter((transaction) => transaction.amount > 0)
+                .reduce((t, transaction) => t + transaction.amount);
+        },
+        getExpense() {
+            this.transactions
+                .filter((transaction) => transaction.amount < 0)
+                .reduce((t, transaction) => t + transaction.amount);
+        },
     },
 };
 </script>
