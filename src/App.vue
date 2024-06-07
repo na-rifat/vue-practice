@@ -17,6 +17,7 @@ import Balance from "./components/Balance.vue";
 import IncomeExpenses from "./components/IncomeExpenses.vue";
 import TransactionList from "./components/TransactionList.vue";
 import AddTransaction from "./components/AddTransaction.vue";
+import { useToast } from "vue-toastification";
 
 export default {
     components: {
@@ -25,6 +26,11 @@ export default {
         IncomeExpenses,
         TransactionList,
         AddTransaction,
+    },
+    setup() {
+        const toast = useToast();
+
+        return { toast };
     },
     data: () => ({
         transactions: [
@@ -69,16 +75,11 @@ export default {
                 amount: parseFloat(form.amount),
             };
 
+            this.transactions.push(transaction);
+            
             form.text = "";
             form.amount = "";
-
-            // console.log(transaction);
-            // return;
-
-            this.transactions.push(transaction);
-
-            console.log(this.transactions);
-            // toast.fire("Transaction Added Successfully!");
+            this.toast.success("Transaction Added Successfully");
         },
         genereteUUID() {
             return Math.ceil(Math.random() * 1000);
