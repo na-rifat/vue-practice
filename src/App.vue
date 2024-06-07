@@ -7,7 +7,7 @@
             :transactions="transactions"
             @remove-transaction="removeTransaction"
         />
-        <AddTransaction />
+        <AddTransaction @add-transaction="addTransaction" />
     </div>
 </template>
 
@@ -62,9 +62,23 @@ export default {
                 (transaction) => transaction.id !== id
             );
         },
-        addTransaction(transaction) {
-            transaction.id = this.genereteUUID();
+        addTransaction(form) {
+            let transaction = {
+                id: this.genereteUUID(),
+                text: form.text,
+                amount: parseFloat(form.amount),
+            };
+
+            form.text = "";
+            form.amount = "";
+
+            // console.log(transaction);
+            // return;
+
             this.transactions.push(transaction);
+
+            console.log(this.transactions);
+            // toast.fire("Transaction Added Successfully!");
         },
         genereteUUID() {
             return Math.ceil(Math.random() * 1000);
@@ -72,4 +86,3 @@ export default {
     },
 };
 </script>
-

@@ -25,6 +25,8 @@ export default {
             required: true,
         },
     },
-    emits: ["remove-transaction"],
+    emits:[
+        'remove-transaction',
+    ],
 };
 </script>
