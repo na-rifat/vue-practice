@@ -25,12 +25,6 @@ export default {
             required: true,
         },
     },
-    emits:[
-        'remove-transaction',
-    ],
-    setup(props) {},
-    data: () => ({}),
-    methods: {},
-    computed: () => {},
+    emits: ["remove-transaction"],
 };
 </script>

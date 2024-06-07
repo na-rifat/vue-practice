@@ -2,7 +2,7 @@
     <Header />
     <div class="container">
         <Balance :balance="balance" />
-        <IncomeExpenses :income="income" :expense="expense" />
+        <IncomeExpenses :income="+income" :expense="expense" />
         <TransactionList
             :transactions="transactions"
             @remove-transaction="removeTransaction"
@@ -33,10 +33,29 @@ export default {
             { id: 3, text: "Book", amount: -10.99 },
             { id: 4, text: "Camera", amount: 150 },
         ],
-        balance: 0,
-        income: 0,
-        expense: 0
     }),
+    computed: {
+        balance() {
+            return this.transactions.reduce(
+                (t, transaction) => t + transaction.amount,
+                0
+            );
+        },
+        income() {
+            return this.transactions
+                .filter((transaction) => transaction.amount > 0)
+                .reduce((t, transaction) => t + transaction.amount, 0)
+                .toFixed(2);
+        },
+        expense() {
+            return (
+                this.transactions
+                    .filter((transaction) => transaction.amount < 0)
+                    .reduce((t, transaction) => t + transaction.amount, 0)
+                    .toFixed(2) * -1
+            );
+        },
+    },
     methods: {
         removeTransaction(id) {
             this.transactions = this.transactions.filter(
@@ -50,21 +69,7 @@ export default {
         genereteUUID() {
             return Math.ceil(Math.random() * 1000);
         },
-        getBalance() {
-            return this.transactions.reduce(
-                (t, transaction) => t + transaction.amount
-            );
-        },
-        getIncome() {
-            this.transactions
-                .filter((transaction) => transaction.amount > 0)
-                .reduce((t, transaction) => t + transaction.amount);
-        },
-        getExpense() {
-            this.transactions
-                .filter((transaction) => transaction.amount < 0)
-                .reduce((t, transaction) => t + transaction.amount);
-        },
     },
 };
 </script>
+
